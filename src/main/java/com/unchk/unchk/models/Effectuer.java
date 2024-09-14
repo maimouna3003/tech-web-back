@@ -1,22 +1,19 @@
 package com.unchk.unchk.models;
 
 import java.util.Date;
-import java.util.List;
-
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,32 +26,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 
-public class Groupe extends GlobalModel {
+public class Effectuer extends GlobalModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false)
-    private String nom;
+    private Date date;
+    private Boolean effectuer;
 
-    @Column(nullable = false)
-    private Integer heureTotalEffectue;
-
-    @Column(nullable = false)
-    private Integer heureTotalNonEffectue;
-
-    @JsonIgnoreProperties("groupes")
+    @JsonIgnoreProperties({ "effectues", "module" })
     @ManyToOne
-    private Module module;
+    private Seance seance;
 
-    @JsonIgnoreProperties("groupes")
+    @JsonIgnoreProperties({ "effectues", "module", "user" })
     @ManyToOne
-    private User user;
-
-    @JsonIgnoreProperties("groupe")
-    @OneToMany(mappedBy = "groupe", fetch = FetchType.EAGER)
-    private List<Effectuer> effectues;
+    private Groupe groupe;
 
     @CreatedDate
     private Date createdAt;

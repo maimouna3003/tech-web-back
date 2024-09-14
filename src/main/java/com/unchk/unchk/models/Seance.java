@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -29,7 +30,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 
-public class Groupe extends GlobalModel {
+public class Seance extends GlobalModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -38,22 +39,12 @@ public class Groupe extends GlobalModel {
     @Column(nullable = false)
     private String nom;
 
-    @Column(nullable = false)
-    private Integer heureTotalEffectue;
-
-    @Column(nullable = false)
-    private Integer heureTotalNonEffectue;
-
-    @JsonIgnoreProperties("groupes")
+    @JsonIgnoreProperties({ "users", "seances", "groupes" })
     @ManyToOne
     private Module module;
 
-    @JsonIgnoreProperties("groupes")
-    @ManyToOne
-    private User user;
-
-    @JsonIgnoreProperties("groupe")
-    @OneToMany(mappedBy = "groupe", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("seance")
+    @OneToMany(mappedBy = "seance", fetch = FetchType.EAGER)
     private List<Effectuer> effectues;
 
     @CreatedDate

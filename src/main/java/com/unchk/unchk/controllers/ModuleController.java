@@ -23,7 +23,7 @@ public class ModuleController {
 
     }
 
-    @GetMapping("/modules")
+    @GetMapping("/")
     public Map<String, Object> getAllModule() {
         return moduleService.getAllEntity();
     }
