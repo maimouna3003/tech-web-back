@@ -50,7 +50,7 @@ public class Groupe extends GlobalModel {
 
     @JsonIgnoreProperties("groupes")
     @ManyToOne
-    private User user;
+    private UserApp user;
 
     @JsonIgnoreProperties("groupe")
     @OneToMany(mappedBy = "groupe", fetch = FetchType.EAGER)

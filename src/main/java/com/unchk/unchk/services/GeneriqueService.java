@@ -1,102 +1,78 @@
 package com.unchk.unchk.services;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.unchk.unchk.env.CustomeHelper;
 import com.unchk.unchk.models.GlobalModel;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class GeneriqueService<T extends JpaRepository<IEntity, String>, IEntity extends GlobalModel> {
     T repository;
 
-    public GeneriqueService(T repository) {
-        this.repository = repository;
-    }
-
     // TODO: Liste des modules
-    public Map<String, Object> getAllEntity() {
-        Map<String, Object> responseData = new HashMap<>();
-
-        responseData.put("message", "Liste enregistrements");
-        responseData.put("data", repository.findAll());
-        return responseData;
+    public ResponseEntity<List<IEntity>> getAllEntity() {
+        try {
+            List<IEntity> responseData = repository.findAll();
+            return new ResponseEntity<>(responseData, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, CustomeHelper.msgErrorServer500);
+        }
 
     }
 
     // TODO:Chercher Entity par Id
-    public Map<String, Object> getEntityById(String id) {
-        Map<String, Object> responseData = new HashMap<>();
-
+    public ResponseEntity<Optional<IEntity>> getEntityById(String id) {
         // Rechercher si l'enregistrement exist
         Optional<IEntity> dataSearch = repository.findById(id);
-        if (dataSearch.isEmpty()) {
-            responseData.put("message", "Ce enregistrement n'existe pas");
-            responseData.put("data", null);
-            return responseData;
-        }
-
-        // Modification de l'enregistrement
-        responseData.put("message", "Enregistrement retrouvé");
-        responseData.put("data", dataSearch);
-
+        if (dataSearch.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, CustomeHelper.msgErrorNotFound404);
         // Response
-        return responseData;
+        return new ResponseEntity<>(dataSearch, HttpStatus.OK);
 
     }
 
     // TODO: Ajouter une Entity
-    public Map<String, Object> addEntity(IEntity entity) throws Exception {
-        Map<String, Object> responseData = new HashMap<>();
-
+    public ResponseEntity<IEntity> addEntity(IEntity entity) throws Exception {
         try {
-            // Enregistrement de l'enregistrement
             IEntity recordSave = repository.save(entity);
-            responseData.put("message", "Enregistrement enregistré");
-            responseData.put("data", recordSave);
+            return new ResponseEntity<>(recordSave, HttpStatus.CREATED);
         } catch (Exception e) {
-            responseData.put("error", e.getMessage());
-            responseData.put("data", null);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, CustomeHelper.msgErrorServer500);
         }
-        return responseData;
     }
 
     // TODO: Modifier une Entity
-    public Map<String, Object> updEntity(IEntity entity) {
-        Map<String, Object> responseData = new HashMap<>();
-
+    public ResponseEntity<IEntity> updEntity(IEntity entity) {
         // Rechercher si l'enregistrement exist
-        Map<String, Object> dataResponseSearch = getEntityById(entity.getId());
-        if (dataResponseSearch.get("data") == null)
-            return dataResponseSearch;
-
-        // Modification de l'enregistrement
-        IEntity recordSave = repository.save(entity);
-        responseData.put("message", "Enregistrement modifié");
-        responseData.put("data", recordSave);
-
-        // Response
-        return responseData;
-
+        getEntityById(entity.getId());
+        try {
+            IEntity recordSave = repository.save(entity);
+            return new ResponseEntity<>(recordSave, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, CustomeHelper.msgErrorServer500);
+        }
     }
 
     // TODO: Supprimer une Entity
-    public Map<String, Object> delEntity(IEntity entity) {
-        Map<String, Object> responseData = new HashMap<>();
-
+    public ResponseEntity<IEntity> delEntity(IEntity entity) {
         // Rechercher si l'enregistrement exist
-        Map<String, Object> dataResponseSearch = getEntityById(entity.getId());
-        if (dataResponseSearch.get("data") == null)
-            return dataResponseSearch;
+        getEntityById(entity.getId());
 
-        // Suppresssion de l'enregistrement
-        repository.delete(entity);
-        responseData.put("message", "Enregistrement supprimé");
-        responseData.put("data", entity);
+        try {
+            repository.delete(entity);
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, CustomeHelper.msgErrorServer500);
+        }
 
-        // Response
-        return responseData;
     }
 
 }

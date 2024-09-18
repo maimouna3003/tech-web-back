@@ -41,7 +41,7 @@ public class Tuteur extends GlobalModel {
 
     @JsonIgnoreProperties({ "tuteur", "groupes", "modules" })
     @OneToOne
-    private User user;
+    private UserApp user;
 
     @CreatedDate
     private Date createdAt;

@@ -1,7 +1,9 @@
 package com.unchk.unchk.controllers;
 
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,41 +12,39 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unchk.unchk.models.User;
+import com.unchk.unchk.models.UserApp;
 import com.unchk.unchk.services.UserService;
 
+import lombok.AllArgsConstructor;
+
 @RestController
+@AllArgsConstructor
 public class UserController {
 
-    UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-
-    }
+    private final UserService userService;
 
     @GetMapping("/users")
-    public Map<String, Object> getAllGroupe() {
+    public ResponseEntity<List<UserApp>> getAllUser() {
         return userService.getAllEntity();
     }
 
     @GetMapping("/user/{id}")
-    public Map<String, Object> getGroupeById(@PathVariable String id) {
+    public ResponseEntity<Optional<UserApp>> getUserById(@PathVariable String id) {
         return userService.getEntityById(id);
     }
 
     @PostMapping("/user/add")
-    public Map<String, Object> addGroupe(@RequestBody User user) throws Exception {
+    public ResponseEntity<UserApp> addUser(@RequestBody UserApp user) throws Exception {
         return userService.addEntity(user);
     }
 
     @PutMapping("/user/update")
-    public Map<String, Object> updGroupe(@RequestBody User user) {
+    public ResponseEntity<UserApp> updUser(@RequestBody UserApp user) {
         return userService.updEntity(user);
     }
 
     @DeleteMapping("/user/delete")
-    public Map<String, Object> delGroupe(@RequestBody User user) {
+    public ResponseEntity<UserApp> delUser(@RequestBody UserApp user) {
         return userService.delEntity(user);
 
     }

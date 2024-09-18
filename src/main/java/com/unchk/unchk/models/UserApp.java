@@ -20,6 +20,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +33,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 
-public class User extends GlobalModel {
+@Table(name = "User")
+public class UserApp extends GlobalModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

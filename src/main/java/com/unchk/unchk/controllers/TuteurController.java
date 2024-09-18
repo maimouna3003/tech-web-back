@@ -1,7 +1,9 @@
 package com.unchk.unchk.controllers;
 
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,37 +15,36 @@ import org.springframework.web.bind.annotation.RestController;
 import com.unchk.unchk.models.Tuteur;
 import com.unchk.unchk.services.TuteurService;
 
+import lombok.AllArgsConstructor;
+
 @RestController
+@AllArgsConstructor
 public class TuteurController {
 
-    TuteurService tuteurService;
-
-    public TuteurController(TuteurService tuteurService) {
-        this.tuteurService = tuteurService;
-    }
+    private final TuteurService tuteurService;
 
     @GetMapping("/tuteurs")
-    public Map<String, Object> getAllGroupe() {
+    public ResponseEntity<List<Tuteur>> getAllTuteur() {
         return tuteurService.getAllEntity();
     }
 
     @GetMapping("/tuteur/{id}")
-    public Map<String, Object> getGroupeById(@PathVariable String id) {
+    public ResponseEntity<Optional<Tuteur>> getTuteurById(@PathVariable String id) {
         return tuteurService.getEntityById(id);
     }
 
     @PostMapping("/tuteur/add")
-    public Map<String, Object> addGroupe(@RequestBody Tuteur tuteur) throws Exception {
+    public ResponseEntity<Tuteur> addTuteur(@RequestBody Tuteur tuteur) throws Exception {
         return tuteurService.addEntity(tuteur);
     }
 
     @PutMapping("/tuteur/update")
-    public Map<String, Object> updGroupe(@RequestBody Tuteur tuteur) {
+    public ResponseEntity<Tuteur> updTuteur(@RequestBody Tuteur tuteur) {
         return tuteurService.updEntity(tuteur);
     }
 
     @DeleteMapping("/tuteur/delete")
-    public Map<String, Object> delGroupe(@RequestBody Tuteur tuteur) {
+    public ResponseEntity<Tuteur> delTuteur(@RequestBody Tuteur tuteur) {
         return tuteurService.delEntity(tuteur);
 
     }
