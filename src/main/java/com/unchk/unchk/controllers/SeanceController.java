@@ -38,6 +38,11 @@ public class SeanceController {
         return seanceService.addEntity(seance);
     }
 
+    @PostMapping("/seances/add")
+    public ResponseEntity<List<Seance>> addSeances(@RequestBody List<Seance> seances) throws Exception {
+        return seanceService.addEntities(seances);
+    }
+
     @PutMapping("/seance/update")
     public ResponseEntity<Seance> updSeance(@RequestBody Seance seance) {
         return seanceService.updEntity(seance);
@@ -46,6 +51,12 @@ public class SeanceController {
     @DeleteMapping("/seance/delete")
     public ResponseEntity<Seance> delSeance(@RequestBody Seance seance) {
         return seanceService.delEntity(seance);
+
+    }
+
+    @DeleteMapping("/seance/delete/all")
+    public ResponseEntity<Seance> delAllSeances(@RequestBody List<Seance> seances) {
+        return seanceService.delAllEntity(seances);
 
     }
 }

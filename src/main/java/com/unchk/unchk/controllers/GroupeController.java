@@ -38,6 +38,11 @@ public class GroupeController {
         return groupeService.addEntity(groupe);
     }
 
+    @PostMapping("/groupes/add")
+    public ResponseEntity<List<Groupe>> addGroupes(@RequestBody List<Groupe> groupes) throws Exception {
+        return groupeService.addEntities(groupes);
+    }
+
     @PutMapping("/groupe/update")
     public ResponseEntity<Groupe> updGroupe(@RequestBody Groupe groupe) {
         return groupeService.updEntity(groupe);
@@ -46,6 +51,12 @@ public class GroupeController {
     @DeleteMapping("/groupe/delete")
     public ResponseEntity<Groupe> delGroupe(@RequestBody Groupe groupe) {
         return groupeService.delEntity(groupe);
+
+    }
+
+    @DeleteMapping("/groupe/delete/all")
+    public ResponseEntity<Groupe> delGroupes(@RequestBody List<Groupe> groupes) {
+        return groupeService.delAllEntity(groupes);
 
     }
 }

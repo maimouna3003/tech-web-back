@@ -8,6 +8,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -45,7 +47,7 @@ public class Groupe extends GlobalModel {
     private Integer heureTotalNonEffectue;
 
     @JsonIgnoreProperties("groupes")
-    @ManyToOne
+    @ManyToOne()
     private Module module;
 
     @JsonIgnoreProperties("groupes")
@@ -53,7 +55,7 @@ public class Groupe extends GlobalModel {
     private UserApp user;
 
     @JsonIgnoreProperties("groupe")
-    @OneToMany(mappedBy = "groupe", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "groupe", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Effectuer> effectues;
 
     @CreatedDate

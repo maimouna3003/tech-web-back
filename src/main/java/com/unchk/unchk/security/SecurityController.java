@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,7 +20,9 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.unchk.unchk.env.CustomeHelper;
 import com.unchk.unchk.models.LoginUser;
 
 import lombok.AllArgsConstructor;
@@ -31,8 +35,7 @@ public class SecurityController {
         private final JwtEncoder jwtEncoder;
 
         @PostMapping("/login")
-        public Map<String, Object> postMethodName(@RequestBody LoginUser loginUser) throws Exception {
-                Map<String, Object> responseData = new HashMap<>();
+        public ResponseEntity<Map<String, String>> postMethodName(@RequestBody LoginUser loginUser) throws Exception {
                 try {
                         Authentication authentication = authenticationManager
                                         .authenticate(new UsernamePasswordAuthenticationToken(
@@ -46,7 +49,7 @@ public class SecurityController {
 
                         JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
                                         .issuedAt(instant)
-                                        .expiresAt(instant.plus(30, ChronoUnit.MINUTES))
+                                        .expiresAt(instant.plus(120, ChronoUnit.MINUTES))
                                         .subject(loginUser.getUserEmail())
                                         .claim("scope", profil)
                                         .build();
@@ -55,19 +58,16 @@ public class SecurityController {
                                         JwsHeader.with(MacAlgorithm.HS512).build(),
                                         jwtClaimsSet);
 
-                        responseData.put("token", jwtEncoder.encode(jwtEncoderParameters).getTokenValue());
-                        responseData.put("message", "Connexion reussit");
-                        responseData.put("error", null);
-
-                        return responseData;
+                        String token = jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
+                        Map<String, String> response = new HashMap();
+                        response.put("token", token);
+                        return new ResponseEntity<>(response, HttpStatus.OK);
 
                 } catch (Exception e) {
                         System.out.println("no acces ressource");
+
                 }
-                responseData.put("token", null);
-                responseData.put("message", null);
-                responseData.put("error", "Email ou mots de pass incorrect !");
-                return responseData;
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, CustomeHelper.msgErrorNotAuth401);
 
         }
 

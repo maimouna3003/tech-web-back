@@ -24,15 +24,25 @@ public class UnchkApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
+		// Set<Module> modules = new HashSet<Module>();
 
-		// for (int i = 0; i < 4; i++) {
+		// modules.add(
+		// Module.builder()
+		// .id("a42367a0-628c-4899-b885-32064a818588")
+		// .build());
+
+		// for (int i = 0; i < 3; i++) {
 		// userService
 		// .addEntity(
-		// UserApp.builder().nom("user" +
-		// i).adresse("adresse").email("ecm@gmail" + i).password("password"
+		// UserApp.builder().nom("admin " +
+		// i).adresse("adresse " + i).email("admin" + i +
+		// "@gmail.com")
+		// .password("password"
 		// + i)
-		// .prenom("prenom").profil(Profil.Admin).telephone("telephone").status(Status.Actif)
-		// .sexe(Sexe.M)
+		// .prenom("prenom" + i).profil(UserApp.Profil.Admin).telephone("77 567 77 66")
+		// // .modules(modules)
+		// .status(UserApp.Status.Actif)
+		// .sexe(UserApp.Sexe.M)
 		// .build());
 		// }
 

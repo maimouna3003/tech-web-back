@@ -49,6 +49,16 @@ public class GeneriqueService<T extends JpaRepository<IEntity, String>, IEntity 
         }
     }
 
+    // TODO: Ajouter des Entities
+    public ResponseEntity<List<IEntity>> addEntities(List<IEntity> entities) throws Exception {
+        try {
+            List<IEntity> recordsSave = repository.saveAll(entities);
+            return new ResponseEntity<>(recordsSave, HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, CustomeHelper.msgErrorServer500);
+        }
+    }
+
     // TODO: Modifier une Entity
     public ResponseEntity<IEntity> updEntity(IEntity entity) {
         // Rechercher si l'enregistrement exist
@@ -68,6 +78,17 @@ public class GeneriqueService<T extends JpaRepository<IEntity, String>, IEntity 
 
         try {
             repository.delete(entity);
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, CustomeHelper.msgErrorServer500);
+        }
+
+    }
+
+    // TODO: Supprimer une Entity
+    public ResponseEntity<IEntity> delAllEntity(List<IEntity> entities) {
+        try {
+            repository.deleteAll(entities);
             return new ResponseEntity<>(null, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, CustomeHelper.msgErrorServer500);

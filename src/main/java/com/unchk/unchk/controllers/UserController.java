@@ -33,6 +33,11 @@ public class UserController {
         return userService.getEntityById(id);
     }
 
+    @GetMapping("/user/currentUser/{email}")
+    public UserApp getCurrentUser(@PathVariable String email) {
+        return userService.loadUserByUsername(email);
+    }
+
     @PostMapping("/user/add")
     public ResponseEntity<UserApp> addUser(@RequestBody UserApp user) throws Exception {
         return userService.addEntity(user);

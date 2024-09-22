@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -37,14 +38,14 @@ public class Seance extends GlobalModel {
     private String id;
 
     @Column(nullable = false)
-    private String nom;
+    private int nom;
 
     @JsonIgnoreProperties({ "users", "seances", "groupes" })
     @ManyToOne
     private Module module;
 
     @JsonIgnoreProperties("seance")
-    @OneToMany(mappedBy = "seance", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "seance", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Effectuer> effectues;
 
     @CreatedDate
