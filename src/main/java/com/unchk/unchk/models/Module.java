@@ -2,15 +2,14 @@ package com.unchk.unchk.models;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import org.hibernate.annotations.ManyToAny;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -49,14 +48,14 @@ public class Module extends GlobalModel {
     @Column(nullable = false)
     private Integer semaine;
 
-    @JsonIgnoreProperties({ "user", "module" })
-    @OneToMany(mappedBy = "module", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({ "module" })
+    @OneToMany(mappedBy = "module", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Groupe> groupes;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnoreProperties({ "groupes", "modules" })
     @JoinTable(name = "affectation", joinColumns = @JoinColumn(name = "module_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;
+    private List<UserApp> users;
 
     @JsonIgnoreProperties("module")
     @OneToMany(mappedBy = "module", fetch = FetchType.EAGER)
