@@ -18,7 +18,7 @@ public class EffectuerService extends GeneriqueService<EffectuerRepository, Effe
         super(repository);
     }
 
-    // TODO: Liste des effectuer par groupe
+    // TODO: Liste des effectuer par groupe...
     public ResponseEntity<List<Effectuer>> getEffectuesByGroupe(Groupe groupe) {
         try {
             List<Effectuer> responseData = repository.findByGroupe(groupe);
