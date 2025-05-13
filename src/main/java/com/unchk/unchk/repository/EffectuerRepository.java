@@ -10,5 +10,5 @@ import com.unchk.unchk.models.Groupe;
 public interface EffectuerRepository extends JpaRepository<Effectuer, String> {
 
     List<Effectuer> findByGroupe(Groupe groupe);
-
+//            
 }
